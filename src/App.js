@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 // main class
 class App extends React.Component {
@@ -6,9 +7,20 @@ class App extends React.Component {
         super();
         this.state = {
             txt: 'this is the state text',
-            currentEvent: '---'
-        }
+            currentEvent: '---',
+            a: '',
+            b: '',
+            c: ''
+        };
         this.update = this.update.bind(this)
+    }
+
+    updating() {
+        this.setState({
+            a: ReactDOM.findDOMNode(this.a).value,
+            b: this.b.value,
+            c: this.refs.c.value
+        });
     }
 
     update(e) {
@@ -26,7 +38,10 @@ class App extends React.Component {
             <div>
                 <h1>Hello World {this.state.txt}</h1>
                 <Widget update={this._update.bind(this)}/>
+                <hr />
                 <Button>I <Heart text="Hello kid" /> React</Button>
+                <hr />
+                {/*checks what current event occurred by user*/}
                 <textarea
                     onKeyPress={this.update}
                     onCopy={this.update}
@@ -37,9 +52,28 @@ class App extends React.Component {
                     cols="30"
                     rows="10">
                 </textarea>
+                {/*displays what current event occurred*/}
                 <h1>{this.state.currentEvent}</h1>
+                <hr />
+                {/*example using ref with callback and component*/}
+                <Input ref={component => this.a = component} update={this.updating.bind(this)} />
+                {this.state.a}
+                <hr />
+                {/*using ref with callback*/}
+                <input ref={node => this.b = node} type="text" onChange={this.updating.bind(this)} />
+                {this.state.b}
+                <hr />
+                {/*using ref without callback*/}
+                <input ref="c" type="text" onChange={this.updating.bind(this)} />
+                {this.state.c}
             </div>
         );
+    };
+}
+
+class Input extends React.Component {
+    render() {
+      return <input type="text" onChange={this.props.update} />
     };
 }
 

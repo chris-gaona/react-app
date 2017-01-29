@@ -11,7 +11,8 @@ class App extends React.Component {
             a: '',
             b: '',
             c: '',
-            val: 0
+            val: 0,
+            items: []
         };
         this.update = this.update.bind(this);
         // this.increment = this.update.bind(this);
@@ -41,6 +42,11 @@ class App extends React.Component {
 
     componentWillMount() {
         console.log('componentWillMount');
+        this.setState({m: 2});
+
+        fetch('http://swapi.co/api/people/?format=json')
+            .then( res => res.json())
+            .then( ({results: items}) => this.setState({items}));
     }
 
     componentDidMount() {
@@ -51,7 +57,21 @@ class App extends React.Component {
         console.log('componentWillUnmount');
     }
 
+    filter(e) {
+        this.setState({filter: e.target.value});
+    }
+
     render() {
+        // create items array for star wars api
+        let items = this.state.items;
+
+        // filter based on user keyup input
+        if (this.state.filter) {
+            items = items.filter(item =>
+                item.name.toLowerCase()
+                    .includes(this.state.filter.toLowerCase()));
+        }
+
         console.log('render');
         return (
             <div>
@@ -86,11 +106,20 @@ class App extends React.Component {
                 <input ref="c" type="text" onChange={this.updating.bind(this)} />
                 {this.state.c}
                 <hr/>
-                <button onClick={this.increment.bind(this)}>{this.state.val}</button>
+                <button onClick={this.increment.bind(this)}>{this.state.val * this.state.m}</button>
+                <hr />
+                <div>
+                    <input type="text" onChange={this.filter.bind(this)} />
+                    {items.map(item =>
+                        <Person key={item.name} person={item}/>
+                    )}
+                </div>
             </div>
         );
     };
 }
+
+const Person = (props) => <h4>{props.person.name}</h4>;
 
 class Wrapper extends React.Component {
     mount() {
@@ -133,8 +162,7 @@ const Widget = (props) =>
 
 // prop validation
 App.propTypes = {
-    txt: React.PropTypes.string.isRequired,
-    cat: React.PropTypes.number.isRequired
+    txt: React.PropTypes.string.isRequired
 };
 
 Heart.propTypes = {

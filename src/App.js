@@ -5,8 +5,14 @@ class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            txt: 'this is the state text'
+            txt: 'this is the state text',
+            currentEvent: '---'
         }
+        this.update = this.update.bind(this)
+    }
+
+    update(e) {
+        this.setState({currentEvent: e.type});
     }
 
     _update(e) {
@@ -21,6 +27,17 @@ class App extends React.Component {
                 <h1>Hello World {this.state.txt}</h1>
                 <Widget update={this._update.bind(this)}/>
                 <Button>I <Heart text="Hello kid" /> React</Button>
+                <textarea
+                    onKeyPress={this.update}
+                    onCopy={this.update}
+                    onCut={this.update}
+                    onPaste={this.update}
+                    onFocus={this.update}
+                    onBlur={this.update}
+                    cols="30"
+                    rows="10">
+                </textarea>
+                <h1>{this.state.currentEvent}</h1>
             </div>
         );
     };
@@ -51,7 +68,7 @@ Heart.propTypes = {
         if (!(propName in props)) {
             return new Error(`missing ${propName}`);
         }
-        if (props[propName].length < 20) {
+        if (props[propName].length < 5) {
             return new Error(`${propName} was too short`);
         }
     }

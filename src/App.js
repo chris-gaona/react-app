@@ -19,8 +19,17 @@ class App extends React.Component {
             <div>
                 <h1>Hello World {this.state.txt}</h1>
                 <Widget update={this._update.bind(this)}/>
+                <Button>I <Heart /> React</Button>
             </div>
         );
+    };
+}
+
+const Button = (props) => <button>{props.children}</button>;
+
+class Heart extends React.Component {
+    render() {
+      return <span>&hearts;</span>
     };
 }
 

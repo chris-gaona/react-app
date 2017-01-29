@@ -17,12 +17,15 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <input type="text" onChange={this._update.bind(this)} />
                 <h1>Hello World {this.state.txt}</h1>
+                <Widget update={this._update.bind(this)}/>
             </div>
         );
     };
 }
+
+const Widget = (props) =>
+    <input type="text" onChange={props.update} />;
 
 App.propTypes = {
     txt: React.PropTypes.string.isRequired,

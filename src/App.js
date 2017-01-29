@@ -10,9 +10,15 @@ class App extends React.Component {
             currentEvent: '---',
             a: '',
             b: '',
-            c: ''
+            c: '',
+            val: 0
         };
-        this.update = this.update.bind(this)
+        this.update = this.update.bind(this);
+        // this.increment = this.update.bind(this);
+    }
+
+    increment() {
+        this.setState({val: this.state.val + 1})
     }
 
     updating() {
@@ -33,7 +39,20 @@ class App extends React.Component {
         })
     }
 
+    componentWillMount() {
+        console.log('componentWillMount');
+    }
+
+    componentDidMount() {
+        console.log('componentDidMount');
+    }
+
+    componentWillUnmount() {
+        console.log('componentWillUnmount');
+    }
+
     render() {
+        console.log('render');
         return (
             <div>
                 <h1>Hello World {this.state.txt}</h1>
@@ -66,9 +85,30 @@ class App extends React.Component {
                 {/*using ref without callback*/}
                 <input ref="c" type="text" onChange={this.updating.bind(this)} />
                 {this.state.c}
+                <hr/>
+                <button onClick={this.increment.bind(this)}>{this.state.val}</button>
             </div>
         );
     };
+}
+
+class Wrapper extends React.Component {
+    mount() {
+        ReactDOM.render(<App />, document.getElementById('a'));
+    }
+
+    unmount() {
+        ReactDOM.unmountComponentAtNode(document.getElementById('a'));
+    }
+
+    render() {
+        return (
+            <div>
+                <button onClick={this.mount.bind(this)}>Mount</button>
+                <button onClick={this.unmount.bind(this)}>UnMount</button>
+            </div>
+        )
+    }
 }
 
 class Input extends React.Component {
@@ -113,4 +153,4 @@ App.defaultProps = {
     txt: "this is the default text"
 };
 
-export default App;
+export default Wrapper;
